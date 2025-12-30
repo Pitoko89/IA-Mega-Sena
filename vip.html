@@ -61,3 +61,38 @@ document.getElementById("resultado").innerHTML=final.map(n=>`<span class='badge'
 </script>
 </body>
 </html>
+<script>
+function abrirVIP(){
+  document.getElementById("vip").style.display = "block";
+  window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+}
+
+function gerar(tipo){
+  const texto = document.getElementById("entrada").value;
+  const nums = texto.match(/\d+/g);
+  if(!nums || nums.length < 60){
+    alert("Cole pelo menos 10 concursos (60 números).");
+    return;
+  }
+
+  let freq = {};
+  nums.forEach(n=>{
+    n=parseInt(n);
+    freq[n]=(freq[n]||0)+1;
+  });
+
+  let pool=[];
+  for(let i=1;i<=60;i++){
+    let f=freq[i]||0;
+    let peso = tipo==='ag' ? f*3+1 : tipo==='co' ? (f?1:4) : f*2+1;
+    for(let j=0;j<peso;j++) pool.push(i);
+  }
+
+  let res=new Set();
+  while(res.size<6) res.add(pool[Math.floor(Math.random()*pool.length)]);
+  let final=[...res].sort((a,b)=>a-b);
+
+  document.getElementById("resultado").innerHTML =
+    final.map(n=>`<span style="padding:10px 15px;background:#00ffcc;color:#000;border-radius:20px;margin:5px;display:inline-block">${n}</span>`).join("");
+}
+</script>
